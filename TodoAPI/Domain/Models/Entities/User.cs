@@ -1,0 +1,23 @@
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using Mapster;
+
+namespace TodoAPI.Domain.Models.Entities
+{
+    [AdaptTo("[name]Dto"), GenerateMapper]
+    public record User
+    {
+        [Key]
+        public long Id { get; init; }
+        [MaxLength(50)]
+        [Required]
+        public string Nickname { get; init; }
+        [MaxLength(50)]
+        [Required]
+        public string Email { get; init; }
+        [Required]
+        [AdaptIgnore]
+        public Password Password { get; init; }
+        public List<Todo> Todos { get; init; }
+    }
+}
