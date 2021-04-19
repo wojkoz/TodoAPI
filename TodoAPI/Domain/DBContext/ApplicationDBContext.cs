@@ -20,7 +20,7 @@ namespace TodoAPI.Domain.DBContext
                 .HasOne(u => u.Password)
                 .WithOne(p => p.User)
                 .HasForeignKey<Password>(p => p.UserId);
-
+            
             modelBuilder.Entity<Todo>()
                 .HasOne(t => t.User)
                 .WithMany(u => u.Todos);
