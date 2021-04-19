@@ -11,18 +11,18 @@ namespace TodoAPI.Domain.Repository.Impl
 {
     public class GenericRepository<T> : IGenericRepository<T> where T: class
     {
-        private readonly ApplicationDbContext _context;
-        private readonly DbSet<T> _db;
+        protected readonly ApplicationDbContext Context;
+        protected readonly DbSet<T> Db;
 
         public GenericRepository(ApplicationDbContext context)
         {
-            _context = context;
-            _db = _context.Set<T>();
+            Context = context;
+            Db = Context.Set<T>();
         }
 
         public async Task<List<T>> GetAllAsync(Expression<Func<T, bool>> expression = null, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, IEnumerable<string> includes = null)
         {
-            IQueryable<T> query = _db;
+            IQueryable<T> query = Db;
 
             if (expression != null)
             {
@@ -45,7 +45,7 @@ namespace TodoAPI.Domain.Repository.Impl
 
         public async Task<T> GetAsync(Expression<Func<T, bool>> expression, IEnumerable<string> includes = null)
         {
-            IQueryable<T> query = _db;
+            IQueryable<T> query = Db;
 
             if (includes != null)
             {
@@ -58,29 +58,29 @@ namespace TodoAPI.Domain.Repository.Impl
 
         public async Task InsertAsync(T entity)
         {
-            await _db.AddAsync(entity);
+            await Db.AddAsync(entity);
         }
 
         public async Task InsertRangeAsync(IEnumerable<T> entities)
         {
-            await _db.AddRangeAsync(entities);
+            await Db.AddRangeAsync(entities);
         }
 
         public async Task DeleteAsync(long id)
         {
-            var entity = await _db.FindAsync(id);
-            _db.Remove(entity);
+            var entity = await Db.FindAsync(id);
+            Db.Remove(entity);
         }
 
         public void DeleteRange(IEnumerable<T> entities)
         {
-            _db.RemoveRange(entities);
+            Db.RemoveRange(entities);
         }
 
         public void Update(T entity)
         {
-            _db.Attach(entity);
-            _context.Entry(entity).State = EntityState.Modified;
+            Db.Attach(entity);
+            Context.Entry(entity).State = EntityState.Modified;
         }
     }
 }
