@@ -28,6 +28,15 @@ namespace TodoAPI
             });
 
             services.AddControllers();
+
+            services.AddCors(o =>
+                o.AddPolicy("CorsAllowAll", cors =>
+                    cors.AllowAnyOrigin()
+                        .AllowAnyMethod()
+                        .AllowAnyHeader()
+                    )
+                );
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "TodoAPI", Version = "v1" });
@@ -45,6 +54,8 @@ namespace TodoAPI
             }
 
             app.UseHttpsRedirection();
+
+            app.UseCors("CorsAllowAll");
 
             app.UseRouting();
 

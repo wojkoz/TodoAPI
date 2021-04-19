@@ -7,8 +7,7 @@ namespace TodoAPI.Domain.Models.Entities
     [AdaptTo("[name]Dto"), GenerateMapper]
     public record User
     {
-        [Key]
-        public long Id { get; init; }
+        public long UserId { get; init; }
         [MaxLength(50)]
         [Required]
         public string Nickname { get; init; }
@@ -18,6 +17,7 @@ namespace TodoAPI.Domain.Models.Entities
         [Required]
         [AdaptIgnore]
         public Password Password { get; init; }
+        [Required]
         public List<Todo> Todos { get; init; }
     }
 }
