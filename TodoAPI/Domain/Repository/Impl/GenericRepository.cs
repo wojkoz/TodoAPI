@@ -4,52 +4,83 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using TodoAPI.Domain.DBContext;
 
 namespace TodoAPI.Domain.Repository.Impl
 {
     public class GenericRepository<T> : IGenericRepository<T> where T: class
     {
-        private readonly ApplicationDbContext _db;
+        private readonly ApplicationDbContext _context;
+        private readonly DbSet<T> _db;
 
-        public GenericRepository(ApplicationDbContext db)
+        public GenericRepository(ApplicationDbContext context)
         {
-            _db = db;
+            _context = context;
+            _db = _context.Set<T>();
         }
 
-        public Task<List<T>> GetAllAsync(Expression<Func<T, bool>> expression = null, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null)
+        public async Task<List<T>> GetAllAsync(Expression<Func<T, bool>> expression = null, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, IEnumerable<string> includes = null)
         {
-            throw new NotImplementedException();
+            IQueryable<T> query = _db;
+
+            if (expression != null)
+            {
+                query = query.Where(expression);
+            }
+
+            if (includes != null)
+            {
+                query = includes.Aggregate(query, (current, includeProperty) =>
+                    current.Include(includeProperty));
+            }
+
+            if (orderBy != null)
+            {
+                query = orderBy(query);
+            }
+
+            return await query.AsNoTracking().ToListAsync();
         }
 
-        public Task<T> GetAsync(Expression<Func<T, bool>> expression)
+        public async Task<T> GetAsync(Expression<Func<T, bool>> expression, IEnumerable<string> includes = null)
         {
-            throw new NotImplementedException();
+            IQueryable<T> query = _db;
+
+            if (includes != null)
+            {
+                query = includes.Aggregate(query, (current, includeProperty) => 
+                    current.Include(includeProperty));
+            }
+
+            return await query.AsNoTracking().FirstOrDefaultAsync(expression);
         }
 
-        public Task InsertAsync(T entity)
+        public async Task InsertAsync(T entity)
         {
-            throw new NotImplementedException();
+            await _db.AddAsync(entity);
         }
 
-        public Task InsertRangeAsync(IEnumerable<T> entities)
+        public async Task InsertRangeAsync(IEnumerable<T> entities)
         {
-            throw new NotImplementedException();
+            await _db.AddRangeAsync(entities);
         }
 
-        public Task DeleteAsync(long id)
+        public async Task DeleteAsync(long id)
         {
-            throw new NotImplementedException();
+            var entity = await _db.FindAsync(id);
+            _db.Remove(entity);
         }
 
         public void DeleteRange(IEnumerable<T> entities)
         {
-            throw new NotImplementedException();
+            _db.RemoveRange(entities);
         }
 
         public void Update(T entity)
         {
-            throw new NotImplementedException();
+            _db.Attach(entity);
+            _context.Entry(entity).State = EntityState.Modified;
         }
     }
 }

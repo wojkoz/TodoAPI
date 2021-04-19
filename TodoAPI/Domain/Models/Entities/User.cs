@@ -18,6 +18,6 @@ namespace TodoAPI.Domain.Models.Entities
         [AdaptIgnore]
         public Password Password { get; init; }
         [Required]
-        public List<Todo> Todos { get; init; }
+        public virtual List<Todo> Todos { get; init; }
     }
 }

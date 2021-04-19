@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
@@ -21,6 +21,7 @@
   </ItemGroup>
 
   <Target Name="Mapster" AfterTargets="AfterBuild">
+    <Exec WorkingDirectory="$(ProjectDir)" Command="dotnet build" />
     <Exec WorkingDirectory="$(ProjectDir)" Command="dotnet tool restore" />
     <Exec WorkingDirectory="$(ProjectDir)" Command="dotnet mapster model -a &quot;$(TargetDir)$(ProjectName).dll&quot; -o &quot;Domain/Dtos&quot;" />
     <Exec WorkingDirectory="$(ProjectDir)" Command="dotnet mapster extension -a &quot;$(TargetDir)$(ProjectName).dll&quot; -o &quot;Domain/Mappers&quot;" />
