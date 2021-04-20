@@ -6,6 +6,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using TodoAPI.Domain.DBContext;
+using TodoAPI.Domain.Repository;
+using TodoAPI.Domain.Repository.Impl;
+using TodoAPI.Domain.Services;
+using TodoAPI.Domain.Services.Impl;
 
 
 namespace TodoAPI
@@ -26,6 +30,11 @@ namespace TodoAPI
             {
                 options.UseSqlServer(Configuration.GetConnectionString("Default"));
             });
+
+            services.AddTransient<ITodoRepository, TodoRepository>();
+            services.AddTransient<IUserRepository, UserRepository>();
+            services.AddTransient<IUserService, UserService>();
+            services.AddTransient<ITodoService, TodoService>();
 
             services.AddControllers();
 

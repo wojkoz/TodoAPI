@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Mapster;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using TodoAPI.Domain.Models.Entities;
 using TodoAPI.Domain.Repository;
+using TodoAPI.Domain.Services;
 
 namespace TodoAPI.Controllers
 {
@@ -12,23 +14,23 @@ namespace TodoAPI.Controllers
     [Route("api/[controller]")]
     public class UserController : ControllerBase
     {
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IUserService _userService;
         private readonly ILogger<UserController> _logger;
 
-        public UserController(ILogger<UserController> logger, IUnitOfWork unitOfWork)
+        public UserController(ILogger<UserController> logger, IUserService userService)
         {
             _logger = logger;
-            _unitOfWork = unitOfWork;
+            _userService = userService;
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<User>>> GetUsers()
+        public async Task<ActionResult<IEnumerable<UserDto>>> GetUsers()
         {
             _logger.LogInformation($"Entered {nameof(GetUsers)}");
             try
             {
-                var users = await _unitOfWork.Users.GetAllAsync();
-                return Ok(users);
+                var users = await _userService.GetAllUsersAsync();
+                return Ok(users.Adapt<IEnumerable<UserDto>>());
             }
             catch (Exception e)
             {
