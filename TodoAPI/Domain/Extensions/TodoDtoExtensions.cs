@@ -1,5 +1,4 @@
 ﻿using TodoAPI.Domain.Models;
-using TodoAPI.Domain.Models.Entities;
 
 namespace TodoAPI.Domain.Extensions
 {

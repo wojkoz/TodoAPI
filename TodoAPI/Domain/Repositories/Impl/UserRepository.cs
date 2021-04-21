@@ -24,5 +24,22 @@ namespace TodoAPI.Domain.Repositories.Impl
             var userPass = await Context.Passwords.FirstOrDefaultAsync(p => p.UserId == user.UserId);
             return userPass is not null && userPass.UserPassword == password;
         }
+
+        public async Task CreateUser(string password, User user)
+        {
+            await Db.AddAsync(user);
+            await Save();
+            var entity = await Db.FirstOrDefaultAsync(u => u.Email == user.Email);
+
+            var pass = new Password()
+            {
+                User = entity,
+                UserId = entity.UserId,
+                UserPassword = password
+            };
+
+            await Context.Passwords.AddAsync(pass);
+            await Save();
+        }
     }
 }

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
-using TodoAPI.Domain.Models.Entities;
+using TodoAPI.Domain.Models;
 
-namespace TodoAPI.Domain.Models.Entities
+namespace TodoAPI.Domain.Models
 {
     public static partial class UserMapper
     {
@@ -49,7 +49,8 @@ namespace TodoAPI.Domain.Models.Entities
                 {
                     TodoId = item.TodoId,
                     Title = item.Title,
-                    Description = item.Description
+                    Description = item.Description,
+                    UserId = item.UserId
                 });
                 i++;
             }
@@ -75,7 +76,8 @@ namespace TodoAPI.Domain.Models.Entities
                 {
                     TodoId = item.TodoId,
                     Title = item.Title,
-                    Description = item.Description
+                    Description = item.Description,
+                    UserId = item.UserId
                 });
                 i++;
             }

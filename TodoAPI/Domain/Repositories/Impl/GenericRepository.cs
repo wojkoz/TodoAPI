@@ -81,5 +81,10 @@ namespace TodoAPI.Domain.Repositories.Impl
             Db.Attach(entity);
             Context.Entry(entity).State = EntityState.Modified;
         }
+
+        public async Task Save()
+        {
+            await Context.SaveChangesAsync();
+        }
     }
 }

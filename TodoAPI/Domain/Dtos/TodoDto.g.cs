@@ -1,4 +1,4 @@
-namespace TodoAPI.Domain.Models.Entities
+namespace TodoAPI.Domain.Models
 {
     public partial class TodoDto
     {

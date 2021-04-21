@@ -25,5 +25,7 @@ namespace TodoAPI.Domain.Repositories
         void DeleteRange(IEnumerable<T> entities);
 
         void Update(T entity);
+
+        Task Save();
     }
 }

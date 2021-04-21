@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Mapster;
 using TodoAPI.Domain.Dtos;
 using TodoAPI.Domain.Extensions;
-using TodoAPI.Domain.Models.Entities;
+using TodoAPI.Domain.Models;
 using TodoAPI.Domain.Repositories;
 
 namespace TodoAPI.Domain.Services.Impl

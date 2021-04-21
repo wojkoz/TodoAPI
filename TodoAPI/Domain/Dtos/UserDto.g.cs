@@ -1,7 +1,7 @@
 using System.Collections.Generic;
-using TodoAPI.Domain.Models.Entities;
+using TodoAPI.Domain.Models;
 
-namespace TodoAPI.Domain.Models.Entities
+namespace TodoAPI.Domain.Models
 {
     public partial class UserDto
     {
