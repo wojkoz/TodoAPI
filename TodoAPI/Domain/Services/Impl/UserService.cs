@@ -22,7 +22,7 @@ namespace TodoAPI.Domain.Services.Impl
         {
             await _userRepository.CreateUser(createUserDto.Password, createUserDto.ToUser());
             var user = await _userRepository.GetAsync(u => u.Email == createUserDto.Email);
-            Console.WriteLine(user.ToString());
+            
             return user.AdaptToDto();
         }
 

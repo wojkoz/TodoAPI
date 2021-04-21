@@ -20,6 +20,7 @@ namespace TodoAPI.Domain.Services.Impl
         public async Task<TodoDto> AddTodoAsync(CreateTodoDto createTodoDto)
         {
             await _todoRepository.InsertAsync(createTodoDto.ToTodo());
+            await _todoRepository.Save();
             var todo = await _todoRepository.GetAsync(t =>
                 (t.Title == createTodoDto.Title) &&
                 (t.Description == createTodoDto.Description) &&
@@ -44,6 +45,7 @@ namespace TodoAPI.Domain.Services.Impl
         public async Task<TodoDto> UpdateTodo(TodoDto dto)
         {
             _todoRepository.Update(dto.ToTodo());
+            await _todoRepository.Save();
             var todo = await _todoRepository.GetAsync(t => t.TodoId == dto.TodoId);
             return todo?.AdaptToDto();
         }
