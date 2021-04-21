@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Mapster;
 using TodoAPI.Domain.Dtos;
 using TodoAPI.Domain.Extensions;
 using TodoAPI.Domain.Models.Entities;
-using TodoAPI.Domain.Repository;
+using TodoAPI.Domain.Repositories;
 
 namespace TodoAPI.Domain.Services.Impl
 {
@@ -27,22 +26,30 @@ namespace TodoAPI.Domain.Services.Impl
 
         public async Task<UserDto> GetUserAsync(long id)
         {
-            throw new NotImplementedException();
+            var user = await _userRepository.GetAsync(u => u.UserId == id);
+
+            return user?.AdaptToDto();
         }
 
         public async Task<UserDto> GetUserAsync(string email)
         {
-            throw new NotImplementedException();
+            var user = await _userRepository.GetAsync(u => u.Email == email);
+
+            return user?.AdaptToDto();
         }
 
         public async Task<IEnumerable<UserDto>> GetAllUsersAsync()
         {
-            throw new NotImplementedException();
+            var users = await _userRepository.GetAllAsync();
+
+            return users?.Adapt<IEnumerable<UserDto>>();
         }
 
         public async Task<bool> AuthenticateUserAsync(string email, string password)
         {
-            throw new NotImplementedException();
+            var isAuthenticated = await _userRepository.AuthenticateAsync(email, password);
+
+            return isAuthenticated;
         }
     }
 }

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace TodoAPI.Domain.Repository
+namespace TodoAPI.Domain.Repositories
 {
     public interface IGenericRepository<T> where T: class
     {

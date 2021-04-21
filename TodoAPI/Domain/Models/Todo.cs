@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Mapster;
 
-namespace TodoAPI.Domain.Models.Entities
+namespace TodoAPI.Domain.Models
 {
     [AdaptTo("[name]Dto"), GenerateMapper]
     public record Todo
@@ -13,7 +13,6 @@ namespace TodoAPI.Domain.Models.Entities
         [MaxLength(250)]
         public string Description { get; init; }
 
-        [AdaptIgnore]
         public long UserId { get; set; }
         [AdaptIgnore]
         public User User { get; set; }

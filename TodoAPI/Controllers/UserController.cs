@@ -5,7 +5,6 @@ using Mapster;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using TodoAPI.Domain.Models.Entities;
-using TodoAPI.Domain.Repository;
 using TodoAPI.Domain.Services;
 
 namespace TodoAPI.Controllers

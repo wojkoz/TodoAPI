@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Mapster;
 using TodoAPI.Domain.Dtos;
+using TodoAPI.Domain.Extensions;
 using TodoAPI.Domain.Models.Entities;
-using TodoAPI.Domain.Repository;
+using TodoAPI.Domain.Repositories;
 
 namespace TodoAPI.Domain.Services.Impl
 {
@@ -15,24 +17,35 @@ namespace TodoAPI.Domain.Services.Impl
             _todoRepository = todoRepository;
         }
 
-        public async Task<TodoDto> AddTodoAsync(long userId, CreateTodoDto createTodoDto)
+        public async Task<TodoDto> AddTodoAsync(CreateTodoDto createTodoDto)
         {
-            throw new System.NotImplementedException();
+            await _todoRepository.InsertAsync(createTodoDto.ToTodo());
+            var todo = await _todoRepository.GetAsync(t =>
+                (t.Title == createTodoDto.Title) &&
+                (t.Description == createTodoDto.Description) &&
+                (t.UserId == createTodoDto.UserId)
+            );
+
+            return todo?.AdaptToDto();
         }
 
         public async Task<IEnumerable<TodoDto>> GetUserTodoListAsync(long id)
         {
-            throw new System.NotImplementedException();
+            var todos = await _todoRepository.GetAllAsync(t => t.UserId == id);
+
+            return todos.Adapt<IEnumerable<TodoDto>>();
         }
 
         public async Task DeleteTodoAsync(long todoId)
         {
-            throw new System.NotImplementedException();
+            await _todoRepository.DeleteAsync(todoId);
         }
 
         public async Task<TodoDto> UpdateTodo(TodoDto dto)
         {
-            throw new System.NotImplementedException();
+            _todoRepository.Update(dto.ToTodo());
+            var todo = await _todoRepository.GetAsync(t => t.TodoId == dto.TodoId);
+            return todo?.AdaptToDto();
         }
     }
 }

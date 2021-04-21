@@ -6,8 +6,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using TodoAPI.Domain.DBContext;
-using TodoAPI.Domain.Repository;
-using TodoAPI.Domain.Repository.Impl;
+using TodoAPI.Domain.Repositories;
+using TodoAPI.Domain.Repositories.Impl;
 using TodoAPI.Domain.Services;
 using TodoAPI.Domain.Services.Impl;
 

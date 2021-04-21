@@ -1,6 +1,6 @@
-﻿using TodoAPI.Domain.Models.Entities;
+﻿using TodoAPI.Domain.Models;
 
-namespace TodoAPI.Domain.Repository
+namespace TodoAPI.Domain.Repositories
 {
     public interface ITodoRepository : IGenericRepository<Todo>
     {

@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -7,7 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using TodoAPI.Domain.DBContext;
 
-namespace TodoAPI.Domain.Repository.Impl
+namespace TodoAPI.Domain.Repositories.Impl
 {
     public class GenericRepository<T> : IGenericRepository<T> where T: class
     {

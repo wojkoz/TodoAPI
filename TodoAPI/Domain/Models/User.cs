@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using Mapster;
 
-namespace TodoAPI.Domain.Models.Entities
+namespace TodoAPI.Domain.Models
 {
     [AdaptTo("[name]Dto"), GenerateMapper]
     public record User

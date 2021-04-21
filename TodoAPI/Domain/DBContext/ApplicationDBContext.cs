@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using TodoAPI.Domain.Models.Entities;
+using TodoAPI.Domain.Models;
 
 namespace TodoAPI.Domain.DBContext
 {
