@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Mapster;
 using TodoAPI.Domain.Dtos;
+using TodoAPI.Domain.Extensions;
 using TodoAPI.Domain.Models.Entities;
 using TodoAPI.Domain.Repository;
 
@@ -18,7 +20,9 @@ namespace TodoAPI.Domain.Services.Impl
 
         public async Task<UserDto> CreateUserAsync(CreateUserDto createUserDto)
         {
-            throw new NotImplementedException();
+            await _userRepository.InsertAsync(createUserDto.ToUser());
+            var user = await _userRepository.GetAsync(u => u.Email == createUserDto.Email);
+            return user.AdaptToDto();
         }
 
         public async Task<UserDto> GetUserAsync(long id)

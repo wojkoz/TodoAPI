@@ -9,9 +9,9 @@ namespace TodoAPI.Controllers
     public class TodoController : ControllerBase
     {
         private readonly ITodoService _userService;
-        private readonly ILogger<UserController> _logger;
+        private readonly ILogger<TodoController> _logger;
 
-        public TodoController(ITodoService userService, ILogger<UserController> logger)
+        public TodoController(ITodoService userService, ILogger<TodoController> logger)
         {
             _userService = userService;
             _logger = logger;
