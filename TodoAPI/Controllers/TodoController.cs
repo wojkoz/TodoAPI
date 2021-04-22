@@ -79,7 +79,7 @@ namespace TodoAPI.Controllers
                 return StatusCode(500, "Server internal Error");
             }
         }
-        // Todo: create object for update todo 
+ 
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]

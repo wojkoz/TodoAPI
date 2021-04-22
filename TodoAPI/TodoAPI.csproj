@@ -20,6 +20,10 @@
     <Generated Include="**\*.g.cs" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Domain\Mappers\" />
+  </ItemGroup>
+
   <Target Name="Mapster" AfterTargets="AfterBuild">
     <Exec WorkingDirectory="$(ProjectDir)" Command="dotnet tool restore" />
     <Exec WorkingDirectory="$(ProjectDir)" Command="dotnet mapster model -a &quot;$(TargetDir)$(ProjectName).dll&quot; -o &quot;Domain/Dtos&quot;" />
