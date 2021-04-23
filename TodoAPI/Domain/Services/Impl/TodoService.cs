@@ -26,28 +26,28 @@ namespace TodoAPI.Domain.Services.Impl
                 (t.Description == createTodoDto.Description) &&
                 (t.UserId == createTodoDto.UserId)
             );
-
-            return todo?.AdaptToDto();
+        
+            return todo?.Adapt<TodoDto>();
         }
-
+        
         public async Task<IEnumerable<TodoDto>> GetUserTodoListAsync(long id)
         {
             var todos = await _todoRepository.GetAllAsync(t => t.UserId == id);
-
+        
             return todos.Adapt<IEnumerable<TodoDto>>();
         }
-
+        
         public async Task DeleteTodoAsync(long todoId)
         {
             await _todoRepository.DeleteAsync(todoId);
         }
-
+        
         public async Task<TodoDto> UpdateTodo(TodoDto dto)
         {
             _todoRepository.Update(dto.ToTodo());
             await _todoRepository.Save();
             var todo = await _todoRepository.GetAsync(t => t.TodoId == dto.TodoId);
-            return todo?.AdaptToDto();
+            return todo?.Adapt<TodoDto>();
         }
     }
 }

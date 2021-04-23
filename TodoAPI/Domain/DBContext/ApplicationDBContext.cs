@@ -1,33 +1,25 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using TodoAPI.Domain.Models;
 
 namespace TodoAPI.Domain.DBContext
 {
-    public class ApplicationDbContext : DbContext
+    public class ApplicationDbContext : IdentityDbContext<User>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
             
         }
 
-        public DbSet<User> Users { get; set; }
-        public DbSet<Password> Passwords { get; set; }
         public DbSet<Todo> Todos { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<User>()
-                .HasOne(u => u.Password)
-                .WithOne(p => p.User)
-                .HasForeignKey<Password>(p => p.UserId);
+            base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<User>()
-                .HasIndex(u => u.Email)
-                .IsUnique();
-            
-            modelBuilder.Entity<Todo>()
-                .HasOne(t => t.User)
-                .WithMany(u => u.Todos);
+            // modelBuilder.Entity<Todo>()
+            //     .HasOne(t => t.User)
+            //     .WithMany(u => u.Todos);
         }
     }
 }

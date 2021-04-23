@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -10,6 +11,7 @@ using TodoAPI.Domain.Services;
 
 namespace TodoAPI.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class TodoController : ControllerBase
@@ -41,13 +43,13 @@ namespace TodoAPI.Controllers
                     return StatusCode(500, "Server internal Error");
                 }
         }
-
+        
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<IEnumerable<TodoDto>>> CreateTodo([FromBody] CreateTodoDto createTodoDto)
         {
-
+        
             _logger.LogInformation($"Entered {nameof(CreateTodo)}");
             try
             {
@@ -60,13 +62,13 @@ namespace TodoAPI.Controllers
                 return StatusCode(500, "Server internal Error");
             }
         }
-
+        
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<IEnumerable<TodoDto>>> UpdateTodo([FromBody] TodoDto todoDto)
         {
-
+        
             _logger.LogInformation($"Entered {nameof(UpdateTodo)}");
             try
             {
@@ -79,13 +81,13 @@ namespace TodoAPI.Controllers
                 return StatusCode(500, "Server internal Error");
             }
         }
- 
+        
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<IEnumerable<TodoDto>>> DeleteTodo(long id)
         {
-
+        
             _logger.LogInformation($"Entered {nameof(UpdateTodo)}");
             try
             {

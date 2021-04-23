@@ -11,7 +11,7 @@ namespace TodoAPI.Domain.Extensions
             {
                 Todos = null,
                 Email = dto.Email,
-                Nickname = dto.Nickname,
+                UserName = dto.UserName,
             };
         }
     }

@@ -6,6 +6,9 @@
 
   <ItemGroup>
     <PackageReference Include="Mapster" Version="7.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.5" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.5">
@@ -18,10 +21,6 @@
 
   <ItemGroup>
     <Generated Include="**\*.g.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Domain\Mappers\" />
   </ItemGroup>
 
   <Target Name="Mapster" AfterTargets="AfterBuild">

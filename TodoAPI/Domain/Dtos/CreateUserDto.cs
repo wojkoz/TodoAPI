@@ -7,7 +7,7 @@ namespace TodoAPI.Domain.Dtos
     {
         [Required]
         [MaxLength(50)]
-        public string Nickname { get; init; }
+        public string UserName { get; init; }
         [Required]
         [MaxLength(50)]
         public string Email { get; init; }
