@@ -30,7 +30,7 @@ namespace TodoAPI.Domain.Services.Impl
             return todo?.Adapt<TodoDto>();
         }
         
-        public async Task<IEnumerable<TodoDto>> GetUserTodoListAsync(long id)
+        public async Task<IEnumerable<TodoDto>> GetUserTodoListAsync(string id)
         {
             var todos = await _todoRepository.GetAllAsync(t => t.UserId == id);
         

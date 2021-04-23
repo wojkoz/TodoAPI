@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using Mapster;
 
 namespace TodoAPI.Domain.Models
@@ -12,9 +13,7 @@ namespace TodoAPI.Domain.Models
         public string Title { get; init; }
         [MaxLength(250)]
         public string Description { get; init; }
-
-        public long UserId { get; set; }
-        [AdaptIgnore]
-        public User User { get; set; }
+        [Required]
+        public string UserId { get; set; }
     }
 }

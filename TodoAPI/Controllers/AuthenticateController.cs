@@ -6,8 +6,10 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using Mapster;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using TodoAPI.Domain.Dtos;
@@ -40,6 +42,7 @@ namespace TodoAPI.Controllers
             {
                 new (ClaimTypes.Name, user.UserName),
                 new (JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new (ClaimValueTypes.String, user.Id)
             };
             authClaims.AddRange(
                 userRoles.Select(userRole => new Claim(ClaimTypes.Role, userRole))
@@ -84,6 +87,13 @@ namespace TodoAPI.Controllers
                 ? StatusCode(StatusCodes.Status500InternalServerError, 
                     new { Status = "Error", Message = $"User creation failed! Please check user details and try again. [{e}]" }) 
                 : Ok(new { Status = "Success", Message = "User created successfully!" });
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetUser(string id)
+        {
+            var user = await _userManager.Users.Include("Todos").FirstOrDefaultAsync(u => u.Id == id);//FindByIdAsync(id);
+            return Ok(user.Adapt<UserDto>());
         }
 
     }

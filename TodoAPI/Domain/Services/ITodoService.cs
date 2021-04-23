@@ -8,7 +8,7 @@ namespace TodoAPI.Domain.Services
     public interface ITodoService
     {
         Task<TodoDto> AddTodoAsync(CreateTodoDto createTodoDto);
-        Task<IEnumerable<TodoDto>> GetUserTodoListAsync(long id);
+        Task<IEnumerable<TodoDto>> GetUserTodoListAsync(string id);
         Task DeleteTodoAsync(long todoId);
         Task<TodoDto> UpdateTodo(TodoDto dto);
     }

@@ -166,15 +166,13 @@ namespace TodoAPI.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<long>("UserId")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("UserId1")
+                    b.Property<string>("UserId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("TodoId");
 
-                    b.HasIndex("UserId1");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Todos");
                 });
@@ -297,11 +295,11 @@ namespace TodoAPI.Migrations
 
             modelBuilder.Entity("TodoAPI.Domain.Models.Todo", b =>
                 {
-                    b.HasOne("TodoAPI.Domain.Models.User", "User")
+                    b.HasOne("TodoAPI.Domain.Models.User", null)
                         .WithMany("Todos")
-                        .HasForeignKey("UserId1");
-
-                    b.Navigation("User");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("TodoAPI.Domain.Models.User", b =>

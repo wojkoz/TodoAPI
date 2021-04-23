@@ -28,7 +28,7 @@ namespace TodoAPI.Controllers
         [HttpGet("{userId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<IEnumerable<TodoDto>>> GetTodosByUserId(long userId)
+        public async Task<ActionResult<IEnumerable<TodoDto>>> GetTodosByUserId(string userId)
         {
             
                 _logger.LogInformation($"Entered {nameof(GetTodosByUserId)}");
