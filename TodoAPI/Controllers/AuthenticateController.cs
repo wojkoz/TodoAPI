@@ -1,19 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
-using System.Security.Claims;
-using System.Text;
 using System.Threading.Tasks;
-using Mapster;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
 using TodoAPI.Domain.Dtos;
-using TodoAPI.Domain.Models;
+using TodoAPI.Domain.Services;
 
 namespace TodoAPI.Controllers
 {
@@ -21,79 +11,53 @@ namespace TodoAPI.Controllers
     [ApiController]
     public class AuthenticateController : ControllerBase
     {
-        private readonly UserManager<User> _userManager;
-        private readonly IConfiguration _configuration;
+        private readonly IAuthService _authService;
 
-        public AuthenticateController(UserManager<User> userManager, IConfiguration configuration)
+        public AuthenticateController(IAuthService authService)
         {
-            this._userManager = userManager;
-            _configuration = configuration;
+            _authService = authService;
         }
 
         [HttpPost]
         [Route("login")]
         public async Task<IActionResult> Login([FromBody] UserLoginDto model)
         {
-            var user = await _userManager.FindByEmailAsync(model.Email);
-            if (user == null || !await _userManager.CheckPasswordAsync(user, model.Password)) return Unauthorized();
-            var userRoles = await _userManager.GetRolesAsync(user);
+            var response = await _authService.LoginAsync(model);
 
-            var authClaims = new List<Claim>
+            if (response is null)
             {
-                new (ClaimTypes.Name, user.UserName),
-                new (JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new (ClaimValueTypes.String, user.Id)
-            };
-            authClaims.AddRange(
-                userRoles.Select(userRole => new Claim(ClaimTypes.Role, userRole))
-            );
+                return Unauthorized();
+            }
 
-            var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]));
-
-            var token = new JwtSecurityToken(
-                issuer: _configuration["JWT:ValidIssuer"],
-                audience: _configuration["JWT:ValidAudience"],
-                expires: DateTime.Now.AddHours(3),
-                claims: authClaims,
-                signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
-            );
-
-            return Ok(new
-            {
-                token = new JwtSecurityTokenHandler().WriteToken(token),
-                expiration = token.ValidTo
-            });
+            return Ok(response);
         }
 
         [HttpPost]
         [Route("register")]
         public async Task<IActionResult> Register([FromBody] UserRegisterDto model)
         {
-            var userExists = await _userManager.FindByEmailAsync(model.Email);
-            if (userExists != null)
-                return StatusCode(StatusCodes.Status500InternalServerError, 
-                    new { Status = "Error", Message = "User already exists!" });
-
-            var user = new User()
+            var result = await _authService.RegisterAsync(model);
+            if (result is null)
             {
-                Email = model.Email,
-                SecurityStamp = Guid.NewGuid().ToString(),
-                UserName = model.UserName
-            };
-            var result = await _userManager.CreateAsync(user, model.Password);
-            var e = result.Errors.Aggregate("", (current, error) => $"{current} {error.Description}\n");
+                return StatusCode(StatusCodes.Status409Conflict,
+                    new { Status = "Error", Message = "User already exists!" });
+            }
+
+            var errors = result.Errors.Select(error => error.Description).ToList();
 
             return !result.Succeeded 
                 ? StatusCode(StatusCodes.Status500InternalServerError, 
-                    new { Status = "Error", Message = $"User creation failed! Please check user details and try again. [{e}]" }) 
-                : Ok(new { Status = "Success", Message = "User created successfully!" });
-        }
-
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetUser(string id)
-        {
-            var user = await _userManager.Users.Include("Todos").FirstOrDefaultAsync(u => u.Id == id);//FindByIdAsync(id);
-            return Ok(user.Adapt<UserDto>());
+                    new
+                    {
+                        Status = "Error", 
+                        Message = $"User creation failed! Please check user details and try again.", 
+                        errors
+                    }) 
+                : Ok(new
+                {
+                    Status = "Success",
+                    Message = "User created successfully!"
+                });
         }
 
     }

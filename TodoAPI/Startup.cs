@@ -38,6 +38,7 @@ namespace TodoAPI
 
             services.AddTransient<ITodoRepository, TodoRepository>();
             services.AddTransient<ITodoService, TodoService>();
+            services.AddTransient<IAuthService, AuthService>();
 
             services.AddIdentity<User, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
