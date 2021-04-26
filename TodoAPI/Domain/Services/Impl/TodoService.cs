@@ -40,6 +40,7 @@ namespace TodoAPI.Domain.Services.Impl
         public async Task DeleteTodoAsync(long todoId)
         {
             await _todoRepository.DeleteAsync(todoId);
+            await _todoRepository.Save();
         }
         
         public async Task<TodoDto> UpdateTodo(TodoDto dto)
