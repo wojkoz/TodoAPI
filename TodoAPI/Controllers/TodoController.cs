@@ -13,7 +13,7 @@ namespace TodoAPI.Controllers
 {
     [Authorize]
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/user/{userId}/todo")]
     public class TodoController : ControllerBase
     {
         private readonly ITodoService _userService;
@@ -25,7 +25,7 @@ namespace TodoAPI.Controllers
             _logger = logger;
         }
 
-        [HttpGet("{userId}")]
+        [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<IEnumerable<TodoDto>>> GetTodosByUserId(string userId)
@@ -47,13 +47,13 @@ namespace TodoAPI.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<IEnumerable<TodoDto>>> CreateTodo([FromBody] CreateTodoDto createTodoDto)
+        public async Task<ActionResult<IEnumerable<TodoDto>>> CreateTodo(string userId, [FromBody] CreateTodoDto createTodoDto)
         {
         
             _logger.LogInformation($"Entered {nameof(CreateTodo)}");
             try
             {
-                var todos = await _userService.AddTodoAsync(createTodoDto);
+                var todos = await _userService.AddTodoAsync(createTodoDto, userId);
                 return Ok(todos);
             }
             catch (Exception e)
@@ -66,7 +66,7 @@ namespace TodoAPI.Controllers
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<IEnumerable<TodoDto>>> UpdateTodo([FromBody] TodoDto todoDto)
+        public async Task<ActionResult<IEnumerable<TodoDto>>> UpdateTodo(string userId, [FromBody] TodoDto todoDto)
         {
         
             _logger.LogInformation($"Entered {nameof(UpdateTodo)}");
@@ -85,13 +85,13 @@ namespace TodoAPI.Controllers
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<IEnumerable<TodoDto>>> DeleteTodo(long id)
+        public async Task<ActionResult<IEnumerable<TodoDto>>> DeleteTodo(string userId, long id)
         {
-        
+
             _logger.LogInformation($"Entered {nameof(UpdateTodo)}");
             try
             {
-                await _userService.DeleteTodoAsync(id);
+                await _userService.DeleteTodoAsync(id, userId);
                 return Ok();
             }
             catch (Exception e)

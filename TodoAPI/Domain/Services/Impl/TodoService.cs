@@ -17,14 +17,14 @@ namespace TodoAPI.Domain.Services.Impl
             _todoRepository = todoRepository;
         }
 
-        public async Task<TodoDto> AddTodoAsync(CreateTodoDto createTodoDto)
+        public async Task<TodoDto> AddTodoAsync(CreateTodoDto createTodoDto, string userId)
         {
             await _todoRepository.InsertAsync(createTodoDto.ToTodo());
             await _todoRepository.Save();
             var todo = await _todoRepository.GetAsync(t =>
                 (t.Title == createTodoDto.Title) &&
                 (t.Description == createTodoDto.Description) &&
-                (t.UserId == createTodoDto.UserId)
+                (t.UserId == userId)
             );
         
             return todo?.Adapt<TodoDto>();
@@ -37,7 +37,7 @@ namespace TodoAPI.Domain.Services.Impl
             return todos.Adapt<IEnumerable<TodoDto>>();
         }
         
-        public async Task DeleteTodoAsync(long todoId)
+        public async Task DeleteTodoAsync(long todoId, string userid)
         {
             await _todoRepository.DeleteAsync(todoId);
             await _todoRepository.Save();
